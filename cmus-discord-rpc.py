@@ -44,19 +44,20 @@ try:
                     elapsed = int(cmus_status["position"])
                     play_song_button = {"label": "Play on YouTube", "url": song_url}
 
-                    youtube_thumbnails = [
-                        "https://img.youtube.com/vi/{song_id}/maxresdefault.jpg",
-                        "https://img.youtube.com/vi/{song_id}/sddefault.jpg",
-                        "https://img.youtube.com/vi/{song_id}/hqdefault.jpg",
-                        "https://img.youtube.com/vi/{song_id}/0.jpg",
-                        "https://img.youtube.com/vi/{song_id}/mqdefault.jpg",
-                        "https://img.youtube.com/vi/{song_id}/1.jpg",
-                        "https://img.youtube.com/vi/{song_id}/2.jpg",
-                        "https://img.youtube.com/vi/{song_id}/3.jpg",
-                        "https://img.youtube.com/vi/{song_id}/default.jpg"
+                    youtube_thumbnail_qualities = [
+                        "maxresdefault.jpg",
+                        "sddefault.jpg",
+                        "hqdefault.jpg",
+                        "0.jpg",
+                        "mqdefault.jpg",
+                        "1.jpg",
+                        "2.jpg",
+                        "3.jpg",
+                        "default.jpg"
                     ]
-                    for thumbnail_url in youtube_thumbnails:
-                        album_cover_url = thumbnail_url.format(song_id=song_id)
+                    # Get the best quality thumbnail
+                    for quality in youtube_thumbnail_qualities:
+                        album_cover_url = f"https://img.youtube.com/vi/{song_id}/{quality}"
                         album_cover_request = requests.get(album_cover_url)
                         if album_cover_request.status_code == 200:
                             album_cover = album_cover_url
@@ -64,11 +65,19 @@ try:
                         else:
                             print()
                             print(f"[X] No thumbnails were found for {song_name} ({song_url})")
+                            
                             # Default asset uploaded to https://discord.com/developers/applications. If you want this to work, you have to upload "assets/vinyl-icon.png"
                             album_cover = "vinyl-icon"
 
                     try:
-                        RPC.update(details=song_name, state=f"by {song_artist}", large_image=album_cover, large_text=album_name, start=time.time()-elapsed, buttons=[play_song_button])
+                        RPC.update(
+                            details = song_name,
+                            state = f"by {song_artist}",
+                            large_image = album_cover,
+                            large_text = album_name,
+                            start = time.time()-elapsed,
+                            buttons = [play_song_button]
+                        )
                     except:
                         print()
                         print("[X] Got rate limited in RPC.update() (probably bc of changing songs too fast)")
