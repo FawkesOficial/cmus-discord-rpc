@@ -19,7 +19,7 @@ RETRY = True
 RETRY_TIMEOUT = 10
 
 # Replace this with your OAuth2 CLIENT ID. If you don't have one you can get it by creating a new application in https://discord.com/developers/applications
-CLIENT_ID = getenv("CMUS_DISCORD_RPC_TOKEN")
+CLIENT_ID = getenv("CMUS_DISCORD_RPC_CLIENT_ID")
 
 try:
     while RETRY:
